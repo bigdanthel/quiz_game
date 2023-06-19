@@ -1,0 +1,53 @@
+import random
+import openpyxl
+
+def load_questions(filename):
+    workbook = openpyxl.load_workbook(filename)
+    sheet = workbook.active
+
+    questions = []
+    for row in sheet.iter_rows(values_only=True):
+        question, answer = row
+        questions.append((question, answer))
+
+    return questions
+
+def play_quiz(questions):
+    score = 0
+    random.shuffle(questions)
+
+    for i in range(15):
+        question, answer = questions[i]
+        print("Question", i+1)
+        print(question)
+
+        user_answer = input("Your answer: ")
+
+        if user_answer.lower() == answer.lower():
+            print("Correct!")
+            score += 1
+        else:
+            print("Incorrect!")
+
+        print("Current Score:", score)
+        print()
+
+    return score
+
+def main():
+    player_name = input("Enter your name: ")
+    quiz_filename = "quiz_questions.xlsx"
+
+    questions = load_questions(quiz_filename)
+
+    print("Welcome to the Quiz Game!")
+    print("==========================")
+
+    score = play_quiz(questions)
+
+    print("==========================")
+    print("Quiz complete!")
+    print("Your final score:", score)
+
+if __name__ == "__main__":
+    main()
